@@ -10,6 +10,12 @@ pub fn setup() -> Result<(), Error> {
 	let dir_path = workspace.join(DIR);
 	let marker_path = dir_path.join(INFO_FILE);
 
+	// Designer fork: branding/ is committed (our own icons and logo; see branding/BRANDING.md).
+	// Graphite's branded assets may not be used in a modified build, so never download them.
+	if dir_path.join("BRANDING.md").exists() {
+		return Ok(());
+	}
+
 	let info = std::fs::read_to_string(&info_path).map_err(|e| Error::Io(e, format!("reading '{}'", info_path.display())))?;
 
 	if let Ok(marker) = std::fs::read_to_string(&marker_path)
