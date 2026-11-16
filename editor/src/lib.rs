@@ -12,6 +12,10 @@ extern crate log;
 
 pub mod application;
 pub mod consts;
+/// Designer fork: what a host page drives the editor through.
+pub mod designer;
+#[cfg(test)]
+mod designer_tests;
 pub mod dispatcher;
 pub mod messages;
 pub mod node_graph_executor;

@@ -7,6 +7,9 @@ export async function registerServiceWorker() {
 			const newWorker = registration.installing;
 			newWorker?.addEventListener("statechange", () => {
 				// Only reload if there was a previous controller, meaning this is an update, not first install
+				// Designer fork: not when a host page frames the editor. A reload there throws away the design the
+				// host has just opened, and this fires on a first visit too; the next opening gets the new version.
+				if (window.parent !== window) return;
 				if (newWorker.state === "activated" && navigator.serviceWorker.controller) window.location.reload();
 			});
 		});

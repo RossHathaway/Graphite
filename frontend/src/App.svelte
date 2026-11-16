@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, onDestroy } from "svelte";
 	import Editor from "/src/components/Editor.svelte";
+	import { installDesignerBridge } from "/src/designer-bridge";
 	import { createSubscriptionsRouter } from "/src/subscriptions-router";
 	import type { MessageName, SubscriptionsRouter } from "/src/subscriptions-router";
 	import { loadDemoArtwork } from "/src/utility-functions/network";
@@ -26,6 +27,9 @@
 		editor = await EditorWrapper.create(operatingSystem(), randomSeed, (messageType: MessageName, messageData: FrontendMessage) => {
 			subscriptions?.handleFrontendMessage(messageType, messageData);
 		});
+
+		// Designer fork: let the page that frames the editor open a design in it and take the result back.
+		installDesignerBridge(editor);
 
 		await loadDemoArtwork(editor);
 	});

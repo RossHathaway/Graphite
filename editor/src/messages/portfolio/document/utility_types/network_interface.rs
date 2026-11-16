@@ -988,6 +988,18 @@ impl NodeNetworkInterface {
 		Some(&metadata.transient_metadata)
 	}
 
+	/// Designer fork: write one `input_data` entry on a node input (the open map stored as `ui::data::<key>`). Layer labels live there.
+	pub fn set_input_data(&mut self, node_id: &NodeId, index: usize, key: &str, value: serde_json::Value, network_path: &[NodeId]) {
+		let Some(metadata) = self
+			.node_metadata_mut(node_id, network_path)
+			.and_then(|node_metadata| node_metadata.persistent_metadata.input_metadata.get_mut(index))
+		else {
+			log::error!("Could not get input metadata for {node_id} index {index} in set_input_data");
+			return;
+		};
+		metadata.persistent_metadata.input_data.insert(key.to_string(), value);
+	}
+
 	pub fn set_input_override(&mut self, node_id: &NodeId, index: usize, widget_override: Option<String>, network_path: &[NodeId]) {
 		let Some(metadata) = self
 			.node_metadata_mut(node_id, network_path)

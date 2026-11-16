@@ -11,6 +11,9 @@ export function downloadFileURL(filename: string, url: string) {
 }
 
 export function downloadFileBlob(filename: string, blob: Blob) {
+	// Designer fork: a file the host bridge asked for goes to the bridge, not to the person's downloads.
+	if (window.designerCapture?.(filename, blob)) return;
+
 	const url = URL.createObjectURL(blob);
 
 	downloadFileURL(filename, url);

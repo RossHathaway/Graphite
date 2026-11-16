@@ -5,6 +5,9 @@
 extern crate log;
 
 pub mod editor_wrapper;
+/// Designer fork: bindings a host page drives the editor through.
+#[cfg(not(feature = "native"))]
+mod designer;
 pub mod helpers;
 pub mod native_communication;
 
