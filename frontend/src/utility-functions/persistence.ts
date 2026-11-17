@@ -1,6 +1,10 @@
 import type { MessageBody } from "/src/subscriptions-router";
 import type { DocumentInfo, EditorWrapper, PersistedState } from "/wrapper/pkg/graphite_wasm_wrapper";
 
+// Designer fork: framed by a host page, the editor keeps no documents of its own in the browser. The host is
+// where a design is kept; a copy autosaved here would come back as a stray tab the next time any design is opened.
+const hosted = window.parent !== window;
+
 const PERSISTENCE_DB = "graphite";
 const PERSISTENCE_STORE = "store";
 
@@ -38,6 +42,8 @@ function reorderDocuments(documents: DocumentInfo[], orderedIds: bigint[]): Docu
 // ====================================
 
 export async function writePersistedDocument(autoSaveDocument: MessageBody<"TriggerPersistenceWriteDocument">) {
+	if (hosted) return;
+
 	const { documentId, document } = autoSaveDocument;
 
 	// Update content in the documents store
@@ -68,6 +74,8 @@ export async function deletePersistedDocument(id: string) {
 }
 
 export async function writePersistedState(state: PersistedState) {
+	if (hosted) return;
+
 	// Keep state ordered and normalized before writing.
 	state.documents = reorderDocuments(
 		state.documents,
@@ -78,6 +86,8 @@ export async function writePersistedState(state: PersistedState) {
 }
 
 export async function readPersistedState(editor: EditorWrapper) {
+	if (hosted) return;
+
 	await migrateToNewFormat();
 	await garbageCollectDocuments();
 

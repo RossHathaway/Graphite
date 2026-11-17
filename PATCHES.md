@@ -29,6 +29,7 @@ for the editor's side and `frontend/src/designer-bridge.ts` for the messages.
 | `frontend/src/App.svelte` | `installDesignerBridge(editor)` | Starts the bridge once the editor exists. |
 | `frontend/src/utility-functions/files.ts` | `downloadFileBlob` asks `window.designerCapture` first | An export or save the bridge asked for goes to the bridge, not to the person's downloads. |
 | `frontend/src/utility-functions/service-worker.ts` | No automatic reload when framed | The reload on a new service worker also fires on a first visit, and throws away the design a host has just opened. |
+| `frontend/src/utility-functions/persistence.ts` | No autosaved documents read or written when framed | The host is where a design is kept. A copy autosaved in the editor's own storage came back as a stray tab the next time any design was opened. |
 | `tools/cargo-run/src/branding.rs`, `.gitignore` | Skip the branded-asset download when `branding/BRANDING.md` exists; commit `branding/` | Graphite's logo and icons may not be used in a modified build. |
 
 ## Building
